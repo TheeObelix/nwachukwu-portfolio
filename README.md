@@ -2,6 +2,12 @@
 
 A React + Vite engineering portfolio featuring seven project case studies, interactive project illustrations, a publication, a professional portrait, and contact links.
 
+## Interactive workspace
+
+The landing page is a Three.js workspace with five selectable stations: About, Experience, Projects, Research, and Contact. Drag to orbit, use the camera buttons to rotate or zoom, and select a station to enter its section. The bottom navigation returns to the workspace from any section. Your portrait, project reports, and particle project explorer remain available.
+
+Motion respects the reduced-motion preference and can be paused. If WebGL is unavailable, station buttons still provide access to all content. The scene uses conceptual models rather than CAD or simulation data.
+
 ## Run locally
 
 Install Node.js 18+ (Node.js 20 or 22 recommended), then open a terminal in this folder:
