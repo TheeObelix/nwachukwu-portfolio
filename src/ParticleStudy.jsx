@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { projectColors } from './palette';
 
 const COUNT = 1800;
 const TAU = Math.PI * 2;
@@ -62,8 +63,9 @@ function pointsFor(type) {
 export default function ParticleStudy({ type, paused, resetKey }) {
   const canvasRef = useRef(null);
   const target = useRef(pointsFor(type));
+  const colors = useRef(projectColors[type] || projectColors.robot);
   const settings = useRef({ paused, resetKey });
-  useEffect(() => { target.current = pointsFor(type); }, [type]);
+  useEffect(() => { target.current = pointsFor(type); colors.current = projectColors[type] || projectColors.robot; }, [type]);
   useEffect(() => { settings.current = { paused, resetKey }; }, [paused, resetKey]);
 
   useEffect(() => {
@@ -104,7 +106,7 @@ export default function ParticleStudy({ type, paused, resetKey }) {
       for (let i = 0; i < 60; i++) {
         const x = ((i * 137.51) % 997) / 997 * width;
         const y = ((i * 93.17) % 601) / 601 * height;
-        context.fillStyle = 'rgba(158,190,206,.17)'; context.fillRect(x, y, 1, 1);
+        context.fillStyle = 'rgba(158,168,184,.13)'; context.fillRect(x, y, 1, 1);
       }
       const projected = current.map((p, i) => {
         const speed = motion.matches || settings.current.paused ? 1 : Math.min(1, dt * 5);
@@ -116,7 +118,7 @@ export default function ParticleStudy({ type, paused, resetKey }) {
       }).sort((a, b) => b.depth - a.depth);
       projected.forEach(p => {
         const alpha = Math.max(.2, Math.min(.95, .7 - p.depth * .22));
-        context.fillStyle = p.i % 11 < 2 ? `rgba(238,181,135,${alpha})` : `rgba(156,216,229,${alpha})`;
+        context.fillStyle = colors.current[p.i % 11 < 2 ? 1 : 0] + Math.round(alpha * 255).toString(16).padStart(2, '0');
         context.beginPath(); context.arc(p.x, p.y, p.size, 0, TAU); context.fill();
       });
     };

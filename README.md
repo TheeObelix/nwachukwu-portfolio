@@ -26,6 +26,10 @@ npm run build
 npm run preview
 ```
 
+## Hosting
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for Cloudflare Pages settings and GitHub branch previews. Production tracks `main`; the 3D redesign is on `adding-features-1`. The Cloudflare account connection and initial project creation still need to be completed in the dashboard.
+
 ## Customize
 
 - `src/main.jsx`: personal biography, project cards, technical summaries, publication and contact links.

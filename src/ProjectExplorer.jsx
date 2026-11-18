@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowUpRight, ArrowLeft, ArrowRight, Pause, Play, RotateCcw } from 'lucide-react';
 import ParticleStudy from './ParticleStudy';
+import { projectColors } from './palette';
 import './project-explorer.css';
 
 const shortNames = ['Robotics', 'Thermal', 'MEMS', 'Self-assembly', 'Graphene', 'Quantum dots', 'Aerogels'];
@@ -11,7 +12,7 @@ export default function ProjectExplorer({ projects, onOpen }) {
   const [resetKey, setResetKey] = useState(0);
   const project = projects[selected];
   const select = index => setSelected((index + projects.length) % projects.length);
-  return <section className="explorer" id="home" aria-label="Interactive engineering portfolio">
+  return <section className="explorer" id="home" aria-label="Interactive engineering portfolio" style={{ '--study-accent': projectColors[project.visual][0] }}>
     <div className="explorer-intro">
       <div><span className="explorer-eyebrow">ENGINEER / RESEARCHER / BUILDER</span><h1>Nwachukwu Ibekwe<span>.</span></h1><p>Exploring what comes next.<br/>From robotic systems to materials at the nanoscale.</p></div>
       <a className="explorer-portrait" href="#about"><img src="/headshot.jpg" alt="Nwachukwu Ibekwe" fetchPriority="high"/><span>Meet the engineer <ArrowUpRight size={13}/></span></a>
@@ -32,6 +33,6 @@ export default function ProjectExplorer({ projects, onOpen }) {
       </div>
     </div>
     <div className="explorer-navigation"><span>SELECT A STUDY</span><div><button aria-label="Previous project" onClick={() => select(selected - 1)}><ArrowLeft size={17}/></button><span>{String(selected + 1).padStart(2, '0')} / 07</span><button aria-label="Next project" onClick={() => select(selected + 1)}><ArrowRight size={17}/></button></div><a href="#about">SCROLL TO DISCOVER ↓</a></div>
-    <nav className="explorer-tabs" aria-label="Select a project">{projects.map((item, index) => <button key={item.id} aria-pressed={selected === index} onClick={() => select(index)}><span>{item.n}</span>{shortNames[index]}<span className="study-indicator">↗</span></button>)}</nav>
+    <nav className="explorer-tabs" aria-label="Select a project">{projects.map((item, index) => <button key={item.id} style={{ '--tab-accent': projectColors[item.visual][0] }} aria-pressed={selected === index} onClick={() => select(index)}><span>{item.n}</span>{shortNames[index]}<span className="study-indicator">↗</span></button>)}</nav>
   </section>;
 }

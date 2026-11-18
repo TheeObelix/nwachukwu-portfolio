@@ -3,36 +3,37 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { ArrowUpRight, Box, User, Briefcase, Layers, Atom, Mail, RotateCcw, Minus, Plus, Pause, Play } from 'lucide-react';
 import './portfolio-platform.css';
+import { stationColors } from './palette';
 
 const stations = [
-  { id: 'about', title: 'The engineer', nav: 'About', icon: User, position: [-4, 0, -1.8], color: '#9ae5e5', kicker: '01 / PROFILE', description: 'Meet the person behind the work. Mechanical engineering at UPenn, hands-on curiosity, and a drive to turn research into real-world impact.', stat: 'UPenn', caption: 'M.S. Mechanical Engineering' },
-  { id: 'experience', title: 'Built for the real world', nav: 'Experience', icon: Briefcase, position: [-2.2, 0, 2], color: '#f0bc8a', kicker: '02 / INDUSTRY & LEADERSHIP', description: 'Explore medical robotics, manufacturing process development, and the teamwork behind an SAE Baja racing vehicle.', stat: 'Hardware → impact', caption: 'Robotics · Manufacturing · Leadership' },
-  { id: 'work', title: 'The project lab', nav: 'Projects', icon: Layers, position: [2.1, 0, 2], color: '#aab6ff', kicker: '03 / SELECTED WORK', description: 'Seven engineering studies spanning robotic manipulation, thermal simulation, microfabrication, and advanced materials. Open the lab to explore every project.', stat: '07 studies', caption: 'Design · Build · Test · Understand' },
-  { id: 'research', title: 'Ideas at a smaller scale', nav: 'Research', icon: Atom, position: [4, 0, -1.8], color: '#a6d9af', kicker: '04 / RESEARCH', description: 'Follow the science behind emerging materials and devices, including a peer-reviewed publication on microwave foaming of poly(lactic acid).', stat: '01 publication', caption: 'Polymer Engineering & Science' },
-  { id: 'contact', title: 'Start a conversation', nav: 'Contact', icon: Mail, position: [0, 0, -4], color: '#f2abc5', kicker: '05 / CONNECT', description: 'Have a hardware challenge, a research question, or an idea worth building? Let’s connect.', stat: 'Let’s build', caption: 'Hardware · Robotics · Emerging technology' },
+  { id: 'about', title: 'The engineer', nav: 'About', icon: User, position: [-4, 0, -1.8], color: stationColors.about, kicker: '01 / PROFILE', description: 'Meet the person behind the work. Mechanical engineering at UPenn, hands-on curiosity, and a drive to turn research into real-world impact.', stat: 'UPenn', caption: 'M.S. Mechanical Engineering' },
+  { id: 'experience', title: 'Built for the real world', nav: 'Experience', icon: Briefcase, position: [-2.2, 0, 2], color: stationColors.experience, kicker: '02 / INDUSTRY & LEADERSHIP', description: 'Explore medical robotics, manufacturing process development, and the teamwork behind an SAE Baja racing vehicle.', stat: 'Hardware → impact', caption: 'Robotics · Manufacturing · Leadership' },
+  { id: 'work', title: 'The project lab', nav: 'Projects', icon: Layers, position: [2.1, 0, 2], color: stationColors.work, kicker: '03 / SELECTED WORK', description: 'Seven engineering studies spanning robotic manipulation, thermal simulation, microfabrication, and advanced materials. Open the lab to explore every project.', stat: '07 studies', caption: 'Design · Build · Test · Understand' },
+  { id: 'research', title: 'Ideas at a smaller scale', nav: 'Research', icon: Atom, position: [4, 0, -1.8], color: stationColors.research, kicker: '04 / RESEARCH', description: 'Follow the science behind emerging materials and devices, including a peer-reviewed publication on microwave foaming of poly(lactic acid).', stat: '01 publication', caption: 'Polymer Engineering & Science' },
+  { id: 'contact', title: 'Start a conversation', nav: 'Contact', icon: Mail, position: [0, 0, -4], color: stationColors.contact, kicker: '05 / CONNECT', description: 'Have a hardware challenge, a research question, or an idea worth building? Let’s connect.', stat: 'Let’s build', caption: 'Hardware · Robotics · Emerging technology' },
 ];
 
 function buildWorld() {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#080d16');
-  scene.fog = new THREE.FogExp2('#080d16', .035);
-  scene.add(new THREE.HemisphereLight(0xbceeff, 0x182035, 2.5));
-  const light = new THREE.DirectionalLight(0xe4f9ff, 3); light.position.set(3, 8, 5); scene.add(light);
-  const warm = new THREE.PointLight(0xefbb8b, 25); warm.position.set(-5, 3, 0); scene.add(warm);
+  scene.background = new THREE.Color('#101318');
+  scene.fog = new THREE.FogExp2('#101318', .035);
+  scene.add(new THREE.HemisphereLight(0xd9e0ea, 0x22262e, 2.1));
+  const light = new THREE.DirectionalLight(0xf0f2f5, 2.5); light.position.set(3, 8, 5); scene.add(light);
+  const fill = new THREE.PointLight(0x91b8df, 14); fill.position.set(-5, 3, 0); scene.add(fill);
   const world = new THREE.Group(); scene.add(world);
   const meshes = [], animated = [], nodes = [];
   const material = (color, metalness = .35) => new THREE.MeshStandardMaterial({ color, metalness, roughness: .4 });
-  const dark = material('#17293c'), silver = material('#c0dae1', .65);
+  const dark = material('#252d38'), silver = material('#b8c2cf', .65);
   const mesh = (geometry, mat, parent, position = [0, 0, 0]) => {
     const object = new THREE.Mesh(geometry, mat); object.position.set(...position); parent.add(object); return object;
   };
   const box = (w, h, d, mat, parent, xyz) => mesh(new THREE.BoxGeometry(w, h, d), mat, parent, xyz);
-  const floor = mesh(new THREE.CircleGeometry(25, 80), material('#0a1420', .1), world, [0, -.3, 0]); floor.rotation.x = -Math.PI / 2;
-  const grid = new THREE.GridHelper(40, 70, 0x31596b, 0x182c3d); grid.position.y = -.27;
+  const floor = mesh(new THREE.CircleGeometry(25, 80), material('#15191f', .1), world, [0, -.3, 0]); floor.rotation.x = -Math.PI / 2;
+  const grid = new THREE.GridHelper(40, 70, 0x3c4653, 0x262d36); grid.position.y = -.27;
   grid.material.transparent = true; grid.material.opacity = .34; world.add(grid);
   // An orbit links each station into one navigable engineering workspace.
   const ringPoints = Array.from({ length: 161 }, (_, i) => new THREE.Vector3(Math.cos(i / 160 * Math.PI * 2) * 4.1, -.15, Math.sin(i / 160 * Math.PI * 2) * 3.6 - .7));
-  world.add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(ringPoints), new THREE.LineBasicMaterial({ color: 0x37586a, transparent: true, opacity: .7 })));
+  world.add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(ringPoints), new THREE.LineBasicMaterial({ color: 0x414c5c, transparent: true, opacity: .7 })));
   stations.forEach((station, index) => {
     const group = new THREE.Group(); group.position.set(...station.position); world.add(group);
     const tint = material(station.color, .5);
@@ -68,7 +69,7 @@ function buildWorld() {
     } else {
       const envelope = box(1.05, .7, .14, tint, model, [0, .9, 0]); envelope.rotation.z = -.12;
       const flap = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-.5, 1.22, .09), new THREE.Vector3(0, .85, .09), new THREE.Vector3(.5, 1.22, .09)]);
-      model.add(new THREE.Line(flap, new THREE.LineBasicMaterial({ color: '#17293c' })));
+      model.add(new THREE.Line(flap, new THREE.LineBasicMaterial({ color: '#252d38' })));
     }
     model.traverse(object => { if (object.isMesh) { object.userData.station = index; meshes.push(object); } });
     meshes.push(base); nodes.push({ group, halo, model });
@@ -76,7 +77,7 @@ function buildWorld() {
   const dust = new Float32Array(450 * 3);
   for (let i = 0; i < 450; i++) { dust[i * 3] = Math.sin(i * 71.3) * 17; dust[i * 3 + 1] = 2 + (i % 37) * .2; dust[i * 3 + 2] = Math.cos(i * 43.7) * 16; }
   const dustGeometry = new THREE.BufferGeometry(); dustGeometry.setAttribute('position', new THREE.BufferAttribute(dust, 3));
-  scene.add(new THREE.Points(dustGeometry, new THREE.PointsMaterial({ color: '#7ba9bd', size: .025, transparent: true, opacity: .45 })));
+  scene.add(new THREE.Points(dustGeometry, new THREE.PointsMaterial({ color: '#8795a8', size: .025, transparent: true, opacity: .45 })));
   return { scene, nodes, meshes, animated };
 }
 
@@ -191,6 +192,6 @@ export default function PortfolioPlatform() {
       <aside className="platform-detail" aria-label="Selected station" style={{ '--station-color': station.color }}><span className="platform-eyebrow">{station.kicker}</span><h2>{station.title}</h2><p>{station.description}</p><div className="platform-stat"><strong>{station.stat}</strong><span>{station.caption}</span></div><button onClick={() => open(station.id)}>Enter {station.nav.toLowerCase()} <ArrowUpRight size={18}/></button></aside>
       <div className="platform-controls"><span>DRAG TO ORBIT · SELECT A STATION</span><div><button aria-label="Rotate workspace left" onClick={() => commands.current.rotate?.(-.25)}>↶</button><button aria-label="Rotate workspace right" onClick={() => commands.current.rotate?.(.25)}>↷</button><button aria-label="Zoom in" onClick={() => commands.current.zoom?.(.9)}><Plus size={15}/></button><button aria-label="Zoom out" onClick={() => commands.current.zoom?.(1.1)}><Minus size={15}/></button><button aria-label="Reset workspace view" onClick={() => commands.current.reset?.()}><RotateCcw size={14}/></button><button aria-label={paused ? 'Play workspace motion' : 'Pause workspace motion'} aria-pressed={paused} onClick={() => setPaused(value => !value)}>{paused ? <Play size={14}/> : <Pause size={14}/>}</button></div></div>
     </div>
-    <nav className="platform-dock" aria-label="Portfolio platform navigation"><button className={view === 'world' ? 'dock-overview active' : 'dock-overview'} aria-current={view === 'world' ? 'page' : undefined} onClick={overview}><Box size={19}/><span>3D workspace</span></button><span className="dock-divider"/>{stations.map((item, index) => { const Icon = item.icon; return <button key={item.id} className={view === 'content' && selected === index ? 'active' : ''} onClick={() => open(item.id)}><Icon size={17}/><span>{item.nav}</span></button>; })}</nav>
+    <nav className="platform-dock" aria-label="Portfolio platform navigation"><button className={view === 'world' ? 'dock-overview active' : 'dock-overview'} aria-current={view === 'world' ? 'page' : undefined} onClick={overview}><Box size={19}/><span>3D workspace</span></button><span className="dock-divider"/>{stations.map((item, index) => { const Icon = item.icon; return <button key={item.id} style={{ '--dock-accent': item.color }} className={view === 'content' && selected === index ? 'active' : ''} onClick={() => open(item.id)}><Icon size={17}/><span>{item.nav}</span></button>; })}</nav>
   </>;
 }
