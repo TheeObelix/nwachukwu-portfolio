@@ -1,37 +1,33 @@
-# Cloudflare Pages: GitHub hosting and branch previews
+# Cloudflare Workers: GitHub hosting and branch previews
 
-## Project settings
+## Existing project
 
-| Setting | Value |
-| --- | --- |
-| Git provider | GitHub |
-| Repository | `TheeObelix/nwachukwu-portfolio` |
-| Project name | `nwachukwu-portfolio` (if available) |
-| Production branch | `main` |
-| Framework preset | React (Vite), or None with the settings below |
-| Build command | `npm run build` |
-| Build output directory | `dist` |
-| Root directory | Repository root (leave blank) |
-| Node version | 22, selected by `.node-version` |
-| Runtime secrets | None required for the current static website |
+- Repository: `TheeObelix/nwachukwu-portfolio`
+- Worker name: `nwachukwu-portfolio`
+- Production URL: https://nwachukwu-portfolio.nwachuks-ni.workers.dev
+- Production branch: `main`
+- Preview branch: `adding-features-1`
+- Node version: 22, selected by `.node-version`
 
-## Connect the repository
+## Build settings
 
-1. Sign in to the [Cloudflare dashboard](https://dash.cloudflare.com/).
-2. Open **Workers & Pages → Create application → Pages → Connect to Git**.
-3. Authorize GitHub and grant access to `TheeObelix/nwachukwu-portfolio`.
-4. Select the repository, apply the project settings above, and select **Save and Deploy**.
-5. Wait for the production build to complete and copy its actual `pages.dev` URL.
+| Setting | Production | Previews Base |
+| --- | --- | --- |
+| Build command | `npm run build` | `npm run build` |
+| Deploy / preview command | `npx wrangler deploy` | `npx wrangler preview` |
+| Root directory | `/` | `/` |
+| Include paths | `*` | `*` |
+| Exclude paths | `node_modules/**`, `.git/` | `node_modules/**`, `.git/` |
 
-Cloudflare's GitHub authorization must be completed by the account owner. No API token belongs in this repository or the frontend.
+Enable **Builds for Preview branches** under Previews Base. `wrangler.jsonc` identifies the Worker and the generated `dist` assets directory. Its empty `previews` block enables preview configuration without adding runtime secrets or backend services. Wrangler is installed as a development dependency and locked by `package-lock.json`.
 
-## Enable previews
+Pushes to `main` update production. Pushes to `adding-features-1` create a separate preview when the GitHub integration and preview builds are enabled. The preview name defaults to the Git branch.
 
-In the Pages project's build settings, enable automatic production deployments for `main` and preview deployments for **All non-Production branches**. For more restrictive previews, choose **Custom branches** and include `adding-features-1` instead.
+## Find the actual preview
 
-Use the Deployments tab to create/retry a deployment of `adding-features-1` if no preview was triggered when the project was connected. Subsequent pushes to that branch trigger preview builds automatically. Copy the preview URL from Cloudflare; the hostname is assigned by Cloudflare and is not assumed here.
+After a successful feature-branch build, use the preview selector or build output in the Cloudflare dashboard to copy the generated Preview URL. The `*-nwachukwu-portfolio.nwachuks-ni.workers.dev` entry under Domains is a wildcard pattern, not an individual preview URL. Worker Previews and version URLs are distinct features; use the URL produced by `wrangler preview`.
 
-`main` currently contains the original portfolio. `adding-features-1` contains the interactive 3D workspace and updated palette. Setting production to `main` intentionally keeps the redesign in preview until it is merged.
+The feature branch contains the 3D workspace and the updated palette. `main` retains the original portfolio until a reviewed merge promotes the redesign.
 
 ## Verify before promoting
 
@@ -41,10 +37,10 @@ Use the Deployments tab to create/retry a deployment of `adding-features-1` if n
 - Check mobile navigation and return to the 3D workspace.
 - Merge the reviewed feature branch into `main` when ready for production.
 
-The website uses hash navigation, so section links do not require custom server redirects. Vite copies files from `public/` to `dist/` during the build, including the PDFs and images.
+The website uses hash navigation. The assets configuration also supplies an SPA fallback. Vite copies PDFs and images from `public/` into `dist/` during the build.
 
 ## References
 
-- [Cloudflare Pages Git integration](https://developers.cloudflare.com/pages/get-started/git-integration/)
-- [Branch deployment controls](https://developers.cloudflare.com/pages/configuration/branch-build-controls/)
-- [Build configuration](https://developers.cloudflare.com/pages/configuration/build-configuration/)
+- [Workers Builds branch settings](https://developers.cloudflare.com/workers/ci-cd/builds/build-branches/)
+- [Worker Previews setup](https://developers.cloudflare.com/workers/previews/get-started/)
+- [Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/)

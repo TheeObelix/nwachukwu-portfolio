@@ -28,7 +28,7 @@ npm run preview
 
 ## Hosting
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for Cloudflare Pages settings and GitHub branch previews. Production tracks `main`; the 3D redesign is on `adding-features-1`. The Cloudflare account connection and initial project creation still need to be completed in the dashboard.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the connected Cloudflare Workers project and GitHub branch previews. Production tracks `main`; the 3D redesign is on `adding-features-1`. Build and preview commands use `wrangler.jsonc`.
 
 ## Customize
 
